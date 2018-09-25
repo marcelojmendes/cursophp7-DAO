@@ -9,9 +9,22 @@ require_once("config.php");
 // transformo em um arquivo JSON
 //echo json_encode($usuarios);
 
-$rayldo = new Usuario();
+// esse metodo carrega somente um usuario.
+#$rayldo = new Usuario();
+#$rayldo->loadById(3);
+#echo $rayldo;
 
-$rayldo->loadById(3);
+// esse metodo carrega uma lista de usuarios
+#$lista = Usuario::getList();
+#echo json_encode($lista);
 
-echo $rayldo;
+// Carrega uma lista de usuarios buscando pelo login
+//$busca = Usuario::search("T");
+//echo json_encode($busca);
+
+#------ Carrega um usuario usando o login e senha
+$usuario = new Usuario();
+$usuario->login("RAYLDO","123456");
+
+echo $usuario;
 ?>
