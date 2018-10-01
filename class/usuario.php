@@ -46,11 +46,7 @@
 				// validar
 				if (count($result) > 0) {
 					# se ele existi, ou seja, se for mais que 0 existe...
-				   $linha = $result[0];
-				   $this->setIdusuario($linha['idusuario']);
-				   $this->setDeslogin($linha['deslogin']);
-				   $this->setSenha($linha['senha']);
-				   $this->setCadastro(new DateTime($linha['dtcadastro']));
+				   $this->setData($result[0]);
 
 				}
 
@@ -83,12 +79,8 @@
 
             	if (count($result) > 0) {
             		# code...
-            		$linha = $result[0];
-
-            		$this->setIdusuario($linha['idusuario']);
-            		$this->setDeslogin($linha['deslogin']);
-            		$this->setSenha($linha['senha']);
-            		$this->setCadastro(new DateTime($linha['dtcadastro']));
+            		
+            		$this->setData($result[0]);
             	}
             	else {
             		throw new Exception("Login e/ou senha inválidos");
@@ -96,9 +88,57 @@
             	}
             }
 
+        public function setData($dados){
+        	    $this->setIdusuario($dados['idusuario']);
+        		$this->setDeslogin($dados['deslogin']);
+        		$this->setSenha($dados['senha']);
+        		$this->setCadastro(new DateTime($dados['dtcadastro']));
+        }
 
 
-			// ao inves dele trazer meu objeto, ele tras minha string e no formato JSON
+            public function INSERT(){
+            	$sql = new Sql();
+            	$result = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)", array(
+
+            		':LOGIN'=>$this->getDeslogin(),
+            		':PASSWORD'=>$this->getSenha()
+
+            	));
+
+            	if (count($result) > 0) {
+            		# code...
+            		$this->setData($result[0]);	
+            	}
+            }
+
+            public function UPDATE($login, $password){
+
+                $this->setDeslogin($login);
+                $this->setSenha($password);
+
+            	$sql = new Sql();
+            	$sql->query("UPDATE tb_usuarios SET deslogin = :LOGIN, senha = :PASSWORD WHERE idusuario = :ID", array(
+
+            		':LOGIN'=>$this->getDeslogin(),
+            		':PASSWORD'=>$this->getSenha(),
+            		':ID'=>$this->getIdusuario()
+
+            	));
+            }
+
+            public function DELETE(){
+            	$sql = new Sql();
+            	$sql->query("DELETE FROM tb_usuarios WHERE idusuario = :ID", array(
+            		':ID'=>$this->getIdusuario()
+            	));
+
+            	$this->setIdusuario(0);
+            	$this->setDeslogin("");
+            	$this->setSenha("");
+            	$this->setCadastro(new DateTime());
+            }
+
+            // ao inves dele trazer meu objeto, ele tras minha string e no formato JSON
 			public function __toString(){
 				return json_encode(array(
 					"idusuario"=>$this->getIdusuario(),

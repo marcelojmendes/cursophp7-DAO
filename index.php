@@ -23,8 +23,33 @@ require_once("config.php");
 //echo json_encode($busca);
 
 #------ Carrega um usuario usando o login e senha
+#$usuario = new Usuario();
+#$usuario->login("RAYLDO","123456");
+#echo $usuario;
+
+// CHAMANDO PROCEDURE DO BANCO.. INSERT
+//$aluno = new Usuario("aluno", "123@#");
+
+// agora para mandar os dados acima para o banco, basta chamar o METODO INSERT
+//$aluno->INSERT();
+
+//echo $aluno;
+ 
+// UPDATE...
+//$usuario = new Usuario();
+
+// carrega o usuario de id 4
+//$usuario->loadById(4); 
+
+// agora altera-lo passando os valores para minhas variaveis
+//$usuario->UPDATE("Analista", "!@$#%*");
+//echo $usuario;
+
 $usuario = new Usuario();
-$usuario->login("RAYLDO","123456");
+
+$usuario->loadById(4);
+
+$usuario->DELETE();
 
 echo $usuario;
 ?>
